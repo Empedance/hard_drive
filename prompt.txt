@@ -901,3 +901,63 @@ Okay, now on the right side option, you can see Cloud Workspace with pricing wri
 Make the two layouts in the hero section a little bigger. Keep some space between them so that the illustrations on the left-hand side and right-hand side can somewhat nearly touch the corners, so that it should look better.
 
 === End of Prompt 70 ===
+
+=== Prompt 71 — 2026-11-24 — Project and subproject status check ===
+
+Can you check the current status of the project? .. And all the subprojects within the folder
+
+=== End of Prompt 71 ===
+
+=== Prompt 72 — 2026-11-24 — Recover the frontend projects deleted by git filter-repo ===
+
+Ran `git filter-repo --force --path coude-disk-bakend/ --path cloud-disk-docs-frontend/ --path cloud-disk-frontend/ --path cloud-disk-images-frontend/ --path cloud-disk-landing/ --path cloud-disk-sheets-frontend/ --path cloud-disk-super-admin-frontend/ --invert-paths` by mistake, then `rm -rf .git` to restart the git history. All the frontend files are lost; only the backend and the desktop app remain. Stop testing the backend and get the data back. Do whatever it takes, but I want my frontend projects back. (Follow-up: I never published those changes to GitHub, so fetching from GitHub is a waste of time; search editor history, worktrees and recovery folders.)
+
+=== End of Prompt 72 ===
+
+=== Prompt 73 — 2026-11-24 — Separate git repositories for the React frontends ===
+
+Put each React frontend in its own git repository, commit everything and push to hard_drive_img_editor, hard_drive_excel_editor, hard_drive_doc_editor, hard_drive_admin and hard_drive_frontend. The backend has its own repository; the whole project with the desktop app is in a separate repository.
+
+=== End of Prompt 73 ===
+
+=== Prompt 74 — 2026-11-24 — Swagger UI in the backend ===
+
+Add Swagger UI to the backend for easy testing; the current server must point to wherever the page is opened (`/`), so nothing has to be switched between dev, stage and local.
+
+=== End of Prompt 74 ===
+
+=== Prompt 75 — 2026-11-24 — Live-URL .env files in every frontend ===
+
+Deployment subdomains: hardisk.in (landing), app (user frontend), admin, doc, excel, img, services (backend). Add a .env to every frontend where missing, commit it (remove it from .gitignore; only plain .env), with live URLs instead of local ones.
+
+=== End of Prompt 75 ===
+
+=== Prompt 76 — 2026-11-24 — Push .env commits ===
+
+Yes, push.
+
+=== End of Prompt 76 ===
+
+=== Prompt 77 — 2026-11-24 — Commit and push the backend ===
+
+Commit and push the backend as well.
+
+=== End of Prompt 77 ===
+
+=== Prompt 78 — 2026-11-24 — Auto-deploy workflow for the frontends ===
+
+Server layout: ~/hard_drive/{hard_drive_admin, hard_drive_doc_editor, hard_drive_excel_editor, hard_drive_img_editor, hard_drive_frontend}. Add a deploy.yml to each frontend so every push logs in to the server, fetches, runs a clean install and builds. No full pipeline, frontends only.
+
+=== End of Prompt 78 ===
+
+=== Prompt 79 — 2026-11-24 — Use pnpm ===
+
+Use pnpm instead of npm.
+
+=== End of Prompt 79 ===
+
+=== Prompt 80 — 2026-11-24 — Commit and publish ===
+
+Okay, you can commit and publish the changes.
+
+=== End of Prompt 80 ===
