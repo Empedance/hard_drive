@@ -1,0 +1,86 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "user-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "cloud-disk-frontend",
+        "run",
+        "dev"
+      ],
+      "port": 5173
+    },
+    {
+      "name": "admin-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "cloud-disk-super-admin-frontend",
+        "run",
+        "dev"
+      ],
+      "port": 5174
+    },
+    {
+      "name": "sheets-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "cloud-disk-sheets-frontend",
+        "run",
+        "dev"
+      ],
+      "port": 5178
+    },
+    {
+      "name": "images-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "cloud-disk-images-frontend",
+        "run",
+        "dev"
+      ],
+      "port": 5179
+    },
+    {
+      "name": "portal-test",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "cloud-disk-frontend",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5175",
+        "--strictPort"
+      ],
+      "port": 5175
+    },
+    {
+      "name": "docs-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "cloud-disk-docs-frontend",
+        "run",
+        "dev"
+      ],
+      "port": 5177
+    },
+    {
+      "name": "landing",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "cloud-disk-landing",
+        "run",
+        "dev"
+      ],
+      "port": 3000
+    }
+  ]
+}

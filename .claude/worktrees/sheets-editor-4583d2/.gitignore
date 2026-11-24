@@ -1,0 +1,20 @@
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.iml
+
+# Secrets — never commit real environment files
+.env
+.env.*
+!.env.example
+
+# Backend build output and local H2 data
+
+# Frontend build output
+node_modules/
+dist/
+coverage/
+
+# Backend is its own git repository (coude-disk-bakend/.git)
+coude-disk-bakend/

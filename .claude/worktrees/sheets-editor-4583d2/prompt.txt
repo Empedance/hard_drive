@@ -1,0 +1,781 @@
+################################################################################
+# PROMPT HISTORY — Cloud Disk
+# Every user prompt for this project is recorded here in order, newest last.
+# Format: a "=== Prompt N ===" header with date and short title, then the
+# prompt text verbatim.
+################################################################################
+
+=== Prompt 1 — 2026-10-28 — Full-stack development instructions (Phase 1 kickoff) ===
+
+# Cloud Disk — Full-Stack Development Instructions
+
+Act as a principal software architect and senior full-stack engineer. Build Cloud Disk, a secure, multi-tenant organizational cloud-storage SaaS platform inspired by Microsoft OneDrive and the Windows "This PC" interface.
+
+## 1. Existing Project Context — Read First
+
+I have already created the initial project directories:
+
+- `CLAUDE.md`
+- `one-drive-bakend/`
+- `one-drive-frontend/`
+- `one-drive-super-admin-frontend/`
+
+The backend directory contains an existing project structure based on the architecture and conventions used in our institution. I have not implemented the frontend applications yet.
+
+**These existing directories are intentional. Do not rename them, replace them, or impose a different repository structure.**
+
+Before writing code:
+
+1. Read `CLAUDE.md` completely.
+2. Inspect the existing backend directory and its files.
+3. Identify the backend's Java packages, naming conventions, layers, entities, DTOs, services, repositories, controllers, configurations, security patterns, exception handling, and database conventions.
+4. Inspect existing dependencies, build configuration, database migrations, and application configuration.
+5. Determine what is already implemented and what is missing.
+6. Follow the established backend architecture consistently throughout Cloud Disk.
+7. Preserve working code and existing conventions unless a change is necessary and justified.
+8. Create the internal frontend structures yourself because both frontends are currently unimplemented.
+9. Decide the remaining internal project organization based on the actual codebase and application requirements.
+
+Do not assume the backend uses a particular package name, folder structure, authentication mechanism, or database schema before inspecting it.
+
+Do not create a replacement backend architecture merely because you prefer another convention.
+
+If the existing architecture conflicts with an essential security or functional requirement, explain the conflict and propose the smallest appropriate change before proceeding.
+
+## 2. Technology Requirements
+
+### Backend
+
+Use the technologies already established by the existing backend project wherever possible.
+
+The intended stack is:
+
+- Java and Spring Boot.
+- Maven, if consistent with the existing backend.
+- Spring Web and REST APIs.
+- Spring Data JPA and Hibernate.
+- MySQL.
+- Spring Security.
+- DTO-based request and response models.
+- Bean Validation.
+- Database migrations, following the existing project conventions.
+- OpenAPI/Swagger where appropriate.
+- JUnit and Mockito for testing.
+
+Do not introduce competing frameworks, duplicate existing modules, or unnecessarily upgrade working dependencies.
+
+If the backend currently uses a different compatible technology or convention, inspect it and explain your recommendation before making major changes.
+
+### User frontend
+
+Create the application inside the existing `one-drive-frontend/` directory.
+
+Use React, TypeScript, and Vite unless an existing project configuration dictates otherwise.
+
+Build a complete user-facing cloud-storage application with a Windows-inspired file-management interface.
+
+### Super Admin frontend
+
+Create the application inside the existing `one-drive-super-admin-frontend/` directory.
+
+Use React, TypeScript, and Vite unless there is a justified alternative.
+
+Build a separate administrative application for platform operators.
+
+Both frontends must use the same backend APIs and security model. Keep their interfaces and access permissions appropriately separated.
+
+### Cloud storage
+
+Use Backblaze B2 as the actual object-storage provider.
+
+Inspect current provider documentation and supported APIs before implementing the integration. Keep storage-provider credentials on the backend.
+
+## 3. Cloud Disk Product Requirements
+
+Cloud Disk is an organizational cloud-storage service, not a general consumer file-sharing application.
+
+### Organization onboarding
+
+Implement an organization registration and activation workflow.
+
+1. A prospective organization administrator registers.
+2. They submit the organization details and administrator information.
+3. Their email is verified.
+4. The organization and owner account are created.
+5. Storage provisioning is initiated and its status tracked.
+6. The owner can sign in after the required activation steps succeed.
+7. The owner is directed to the Cloud Disk user interface.
+
+Provide appropriate handling for incomplete onboarding, provisioning failures, retries, and account activation.
+
+Never store plaintext passwords or hardcode production credentials.
+
+### User interface — Windows-inspired This PC
+
+The main screen after login must resemble Windows File Explorer's "This PC" view.
+
+Create:
+
+- A top navigation bar with breadcrumbs, search, upload, notifications, and a profile menu.
+- A collapsible left sidebar.
+- Quick-access folders and favorites.
+- Recents.
+- Photos.
+- Documents.
+- Shared with Me.
+- Shared by Me.
+- Trash.
+- A central This PC view displaying virtual drives.
+- File and folder browsing with list and grid views where appropriate.
+- Sorting, search, navigation, loading states, and error handling.
+
+Drive cards should display the drive letter, drive name, allocated capacity, used capacity, available capacity, and a blue storage-usage progress bar.
+
+All displayed storage values must come from actual backend data.
+
+The interface should be polished, responsive, accessible, and visually faithful to Windows file-management patterns without copying Microsoft branding.
+
+### Virtual drives
+
+Users should be able to create logical drives such as C:, D:, E:, and additional permitted drive letters.
+
+These are virtual drives in Cloud Disk, not actual operating-system partitions.
+
+The organization purchases a storage allocation. Its administrators divide that allocation among virtual drives.
+
+Implement:
+
+- Drive creation and naming.
+- Drive-letter uniqueness within an organization.
+- Storage allocation and reallocation.
+- Capacity and usage reporting.
+- Drive membership.
+- Per-drive permissions.
+- Safe drive deletion or archival.
+- Prevention of capacity oversubscription.
+
+Drive allocations must never exceed the organization's purchased capacity.
+
+Capacity changes must not silently delete data or violate existing storage usage constraints.
+
+### File and folder operations
+
+Implement functional, backend-connected workflows for:
+
+- Uploading files.
+- Downloading files.
+- Creating folders.
+- Renaming and moving files and folders.
+- Deleting files and folders.
+- Trash and restoration where appropriate.
+- Sharing files and folders.
+- Viewing file metadata.
+- Favorites and Recents.
+- Photos and Documents views.
+
+Use Backblaze B2 for actual file contents and the existing backend's database conventions for metadata.
+
+Do not store file contents directly in MySQL.
+
+Support large uploads where appropriate, with progress indicators, validation, retry handling, and reliable storage accounting.
+
+Use private object storage and authorized, short-lived upload/download access.
+
+### Organization members
+
+Organization owners and authorized administrators must be able to invite and manage members.
+
+Implement:
+
+- Invitations.
+- Member activation and deactivation.
+- Role assignment.
+- Drive assignment.
+- Drive-level permissions.
+- Access revocation.
+- Relevant activity history.
+
+A user may have access to selected drives without access to every drive in the organization.
+
+Enforce all authorization on the backend. Frontend hiding of buttons is not a security mechanism.
+
+### File sharing
+
+Allow authorized users to generate file or folder share links.
+
+Provide configurable expiration options, such as one hour, one day, seven days, and thirty days, plus custom expiration where permitted.
+
+Support revocation, optional passwords, recipient restrictions, and appropriate access permissions.
+
+Enforce expiration and revocation server-side. Use cryptographically secure tokens and avoid storing raw tokens in logs.
+
+### Storage subscription and billing
+
+The organization must be able to select storage capacity from a minimum of 1 TB to a maximum of 250 TB.
+
+Create a draggable capacity selector with a numeric input alternative.
+
+Display the selected capacity, price per TB, billing interval, estimated amount, applicable taxes, and confirmation action.
+
+Store global pricing configuration in the database. Allow authorized Super Admin users to configure default pricing and organization-specific pricing overrides.
+
+The effective price must use the applicable organization-specific override when valid and otherwise fall back to the global configuration.
+
+Store historical pricing snapshots for subscriptions and invoices.
+
+Calculate prices on the backend. Never trust a price submitted by the frontend.
+
+Do not create a real payment integration until the payment provider and required credentials have been agreed upon. Use a clearly identified development adapter for local testing if necessary.
+
+Purchased storage, drive allocations, and actual storage consumption must be modeled separately.
+
+### User profile
+
+Provide profile settings, organization settings, team management, subscription details, billing history, security settings, active sessions, and logout.
+
+Only authorized organization roles may access sensitive organization or billing settings.
+
+## 4. Backblaze B2 Integration
+
+Implement a secure, testable object-storage integration.
+
+Evaluate the bucket strategy before implementing it. The default recommendation is a dedicated private bucket per organization, with individual virtual drives represented through database metadata and isolated object-key namespaces.
+
+Do not create a new bucket for every virtual drive.
+
+Do not create a separate bucket for every member unless the requirements justify that complexity.
+
+Implement reliable organization provisioning, upload, download, deletion, error recovery, retries, and storage reconciliation.
+
+Keep the object-storage implementation separate from business logic so it can be tested with a mock or test storage adapter.
+
+Account for partial failures between MySQL and Backblaze B2. Do not assume a database transaction can roll back an object-storage operation.
+
+Never expose Backblaze credentials or permanent public object URLs to the browser.
+
+## 5. Super Admin application
+
+The Super Admin frontend must be a separate application inside `one-drive-super-admin-frontend/`.
+
+It should provide:
+
+- Platform dashboard.
+- Organization onboarding and management.
+- Organization and member details.
+- Storage usage and provisioning status.
+- Subscription and payment information.
+- Global pricing configuration.
+- Organization-specific pricing overrides.
+- User and account management.
+- Audit logs.
+- Login and security-event monitoring.
+- Search, filtering, and pagination.
+- Authorized suspension and reactivation workflows.
+
+Display real backend data rather than fabricated dashboard statistics.
+
+Record relevant events such as authentication attempts, organization creation, drive changes, uploads, downloads, deletions, sharing, billing changes, and administrative actions.
+
+Audit logs must not expose passwords, secrets, raw session identifiers, or signed URLs.
+
+Super Admin access to customer file contents must not be automatic. Exceptional access must be explicitly authorized, limited, justified, and audited.
+
+Use dedicated administrative authorization rules on the backend.
+
+## 6. Architecture and Implementation Rules
+
+Follow the existing backend's architecture and conventions.
+
+For the frontends, create a clean internal structure suitable for the application's complexity. Use reusable components, typed API contracts, consistent validation, centralized error handling, and appropriate server-state management.
+
+Before introducing a new library or architectural abstraction, inspect what already exists and explain why the addition is necessary.
+
+Do not duplicate existing utilities, security mechanisms, entities, or configuration.
+
+Use database migrations consistently with the existing backend.
+
+Every tenant-owned resource must have a defensible organization ownership path. Prevent cross-organization access even when a user manipulates IDs in API requests.
+
+Implement proper validation, authorization, concurrency protection, and idempotency for critical operations.
+
+Do not introduce microservices without a concrete requirement.
+
+## 7. Testing and Verification
+
+Implement automated tests appropriate to the existing backend architecture and both frontends.
+
+Verify:
+
+- Authentication and authorization.
+- Organization isolation.
+- Organization onboarding.
+- Drive allocation and capacity constraints.
+- Upload and download.
+- Storage usage calculations.
+- Folder and file permissions.
+- Sharing expiration and revocation.
+- Pricing and billing calculations.
+- Administrative access controls.
+- Error handling and storage-provider failures.
+
+Run the actual available backend and frontend tests, linting, type checks, and production builds.
+
+Fix failures introduced by your changes.
+
+Never claim a test passed unless it was executed successfully. Clearly identify anything that remains untested because of missing services or credentials.
+
+## 8. Mandatory Workflow
+
+### Phase 1 — Inspect and plan
+
+Start by reading `CLAUDE.md` and examining the existing backend.
+
+Identify the current architecture and report:
+
+- Existing backend structure and conventions.
+- Existing functionality and reusable components.
+- Missing backend functionality.
+- Frontend implementation plan for both applications.
+- Database design and migration approach.
+- Authentication and authorization design.
+- Backblaze B2 integration strategy.
+- Virtual-drive and storage-accounting design.
+- Billing and pricing design.
+- API contracts.
+- Testing and deployment approach.
+- Essential unresolved decisions.
+
+Create or update the relevant documentation using the repository's existing conventions.
+
+Do not create or replace the repository structure. Decide the internal structure of the two frontends yourself.
+
+Do not start a major implementation before I approve the plan.
+
+### Phase 2 — Foundation
+
+After approval, implement the necessary foundation while preserving the existing backend.
+
+Create both React/Vite applications in their existing directories. Configure the API clients, routing, UI foundations, backend integration, environment variables, and tests.
+
+Verify the applications build successfully.
+
+### Phase 3 — Feature implementation
+
+Implement the product in coherent, testable milestones.
+
+Recommended order:
+
+1. Organization onboarding and authentication.
+2. Organization and member management.
+3. Backblaze B2 integration and provisioning.
+4. Virtual drives and storage allocation.
+5. File and folder management.
+6. Windows-inspired This PC interface.
+7. Favorites, Recents, Photos, and Documents.
+8. Permissions and sharing.
+9. Subscription and billing.
+10. Super Admin portal.
+11. Audit logs, security hardening, and deployment.
+
+Adjust this sequence based on the existing backend and dependencies.
+
+Every completed feature must have working frontend integration, backend behavior, persistence, authorization, and appropriate tests.
+
+### Phase 4 — Final verification
+
+Run all available tests and production builds. Verify the critical user journeys. Document configuration requirements, deployment steps, known limitations, and external services that still require credentials.
+
+## 9. Non-Negotiable Instructions
+
+- Inspect existing code before editing.
+- Preserve the established backend structure.
+- Keep the existing directory names unchanged.
+- Do not assume the frontend already exists.
+- Build both frontends from scratch in their existing directories.
+- Do not invent existing backend classes or packages.
+- Do not replace working code unnecessarily.
+- Do not use mock data as a substitute for completed functionality.
+- Do not trust frontend authorization.
+- Do not hardcode secrets, prices, or production credentials.
+- Do not execute destructive operations without approval.
+- Do not weaken security or tests to make the build pass.
+- Maintain a working implementation and update documentation throughout.
+- Report changed files, commands executed, actual test results, and remaining work after each milestone.
+
+# Begin Now
+
+Start with Phase 1.
+
+Read `CLAUDE.md`, inspect the existing backend, and determine how Cloud Disk should be implemented while following the architecture and conventions already used in our institution.
+
+Do not prescribe a replacement repository structure. Do not begin the full implementation yet.
+
+Present your findings and proposed implementation plan, identify essential decisions, and wait for my approval.
+
+
+
+Additional instruction given with Prompt 1:
+Maintain prompt history in prompt.txt
+
+=== End of Prompt 1 ===
+
+=== Prompt 2 — 2026-10-28 — Plan approval ===
+
+Approve defaults
+
+(Context: approves the recommended defaults for all 14 decisions in docs/implementation-plan.md §14 and starts Phase 2 — foundation.)
+
+=== End of Prompt 2 ===
+
+=== Prompt 3 — 2026-10-28 — Commit Milestone 1 and continue ===
+
+Commit and continue
+
+(Context: commit Milestone 1 to main, then start Milestone 2 — organization onboarding and authentication.)
+
+=== End of Prompt 3 ===
+
+=== Prompt 4 — 2026-10-29 — Review first ===
+
+Review first
+
+(Context: chose "Review first" instead of starting Milestone 3; asked what to review or test manually before continuing.)
+
+=== End of Prompt 4 ===
+
+=== Prompt 5 — 2026-10-29 — Remaining milestones ===
+
+How many milestones are left to complete the project
+
+=== End of Prompt 5 ===
+
+=== Prompt 6 — 2026-10-29 — Milestone 3 + email API ===
+
+Proceed with milestone 3 and use the following api to send email.
+
+curl -X POST https://empedance.com/api/send-mail \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: [REDACTED]" \
+  -d '{
+    "receiver": "ayushniyam@gmail.com",
+    "subject": "New Inquiry",
+    "html": "<h1>New Inquiry Received</h1><p>This is a test email.</p>",
+    "apiKey": "[REDACTED]"
+  }'
+
+(Key values redacted in this history file; they are configured only through environment variables.)
+
+=== End of Prompt 6 ===
+
+=== Prompt 7 — 2026-10-29 — Start Milestone 4 ===
+
+Start Milestone 4
+
+(Context: Backblaze B2 storage provisioning.)
+
+=== End of Prompt 7 ===
+
+=== Prompt 8 — 2026-10-29 — Start Milestone 5 ===
+
+Start Milestone 5
+
+(Context: virtual drives and storage allocation.)
+
+=== End of Prompt 8 ===
+
+=== Prompt 9 — 2026-10-29 — Pause to review ===
+
+Pause. I want to try drives locally first; tell me the exact steps.
+
+=== End of Prompt 9 ===
+
+=== Prompt 10 — 2026-10-29 — Fix review findings first ===
+
+Fix the 5 review findings first (reload sign-out via refresh cookie, mobile sidebar, link colors, readable sizes in errors, drives table polish), then continue to Milestone 6.
+
+=== End of Prompt 10 ===
+
+=== Prompt 11 — 2026-10-29 — Start Milestone 6 ===
+
+Start Milestone 6
+
+(Context: files and folders.)
+
+=== End of Prompt 11 ===
+
+=== Prompt 12 — 2026-10-29 — Start Milestone 7 ===
+
+Start Milestone 7
+
+(Context: the Windows-style This PC explorer interface.)
+
+=== End of Prompt 12 ===
+
+=== Prompt 13 — 2026-10-29 — Context budget question ===
+
+I can see that my context is only 75% remaining. Will I be able to make it to milestone 12 with 25% of my context remaining?
+
+=== End of Prompt 13 ===
+
+=== Prompt 14 — 2026-10-29 — Milestones 8 and 9 ===
+
+Complete milestones 8 and 9 together, and make sure it is done with the least useless token possible
+
+=== End of Prompt 14 ===
+
+=== Prompt 15 — 2026-10-29 — Milestone 10 ===
+
+Implement Milestone 10 (subscription and billing): versioned global pricing, organization overrides, subscriptions and invoices with pricing snapshots, server-side quotes, development payment adapter, owner-only Billing page with a 1–250 TB slider and live quote, tests; keep token use lean.
+
+(Context: delegated from the main session as a side session.)
+
+=== End of Prompt 15 ===
+
+=== Prompt 16 — 2026-10-29 — Milestone 11 ===
+
+Continue with milestone 11.
+
+(Context: the Super Admin portal.)
+
+=== End of Prompt 16 ===
+
+=== Prompt 17 — 2026-10-29 — Milestone 12 ===
+
+Start Milestone 12
+
+(Context: hardening — Super Admin MFA, owner-approved content access, rate limiting, security headers, deployment guide, final verification.)
+
+=== End of Prompt 17 ===
+
+=== Prompt 18 — 2026-10-29 — How to run the project ===
+
+Tell me how I can run this. Tell me everything: setting the key and values for B2, the rest of the configuration, and finally running the whole project.
+
+=== End of Prompt 18 ===
+
+=== Prompt 19 — 2026-10-29 — Commit the .gitignore fix ===
+
+Commit the fix
+
+=== End of Prompt 19 ===
+
+=== Prompt 20 — 2026-10-29 — Super Admin login screen ===
+
+(Pasted the console's two-step setup screen, including the setup key — REDACTED here.) I got this on http://localhost:5174/login. How can I log in?
+
+=== End of Prompt 20 ===
+
+=== Prompt 21 — 2026-10-29 — Switch to OTP ===
+
+I don't need this kind of two-factor authentication. Better to keep it through OTP.
+
+(Context: replaced the authenticator-app step with an emailed one-time code.)
+
+=== End of Prompt 21 ===
+
+=== Prompt 22 — 2026-10-30 — Where are uploaded files stored ===
+
+I have created OneDrive for one user, uploaded a file, but I can't see that file or that data in my B2 bucket. Just tell me where it is getting stored. I'm doing it in my development environment.
+
+=== End of Prompt 22 ===
+
+=== Prompt 23 — 2026-10-30 — Per-organization B2 buckets ===
+
+Then how will it be connected to B2? I need that whenever an organization signs in, a new bucket should be created for them, with separate disks inside, and files uploaded to B2, not locally, with proper segregation by organization. Suggest a better way if there is one.
+
+=== End of Prompt 23 ===
+
+=== Prompt 24 — 2026-10-30 — Explorer-style drive tiles ===
+
+(Screenshot of desktop-explorer drive tiles.) I want the disks UI exactly like this; the organization storage on top should be collapsible with a dropdown icon. Colors will be changed later.
+
+=== End of Prompt 24 ===
+
+=== Prompt 25 — 2026-10-30 — Commit ===
+
+Commit both
+
+=== End of Prompt 25 ===
+
+=== Prompt 26 — 2026-10-30 — B2 key capabilities ===
+
+I tried testing with storage_provider=b2 but got an authorisation exception. Here are my key's capabilities: (list of B2 capabilities). Is it sufficient?
+
+=== End of Prompt 26 ===
+
+=== Prompt 27 — 2026-10-30 — Mail not sent ===
+
+why my mails are not getting sent
+
+=== End of Prompt 27 ===
+
+=== Prompt 28 — 2026-10-30 — Capacity guard and Cloud Replication ===
+
+When a user drags to reduce capacity below their existing files, block it with a pop-up: "You have existing files of a total of 4 TB, so you can't reduce the storage. Please contact support." Add a "Cloud Replication" tab: a replica of the storage in a different bucket, explained in friendly, non-technical words; when enabled, a 10 TB plan becomes 5 TB normal space and 5 TB replica space, using B2 features.
+
+=== End of Prompt 28 ===
+
+=== Prompt 29 — 2026-10-30 — Units ===
+
+In the above prompt, wherever I have given GB, please consider it as TB.
+
+=== End of Prompt 29 ===
+
+=== Prompt 30 — 2026-10-30 — Not yet ===
+
+Not yet
+
+(Context: declined committing the billing size guard and Cloud Replication for now.)
+
+=== End of Prompt 30 ===
+
+=== Prompt 31 — 2026-10-30 — Typed confirmation, prorated billing, reminders and blocking ===
+
+Increasing or decreasing space must require typing "increase" or "decrease" in a dialog before confirming. Implement proper prorated pricing (e.g. 15 days at 50 TB then 15 days at 40 TB). Five days before the month ends the user gets the exact bill; while payment is pending they see a daily warning; 15 days after expiry access is blocked until paid. Email notifications: a countdown during the last 5 days before expiry, then daily "N days from access blocking" after expiry, with proper, understandable, well-designed emails.
+
+=== End of Prompt 31 ===
+
+=== Prompt 32 — 2026-10-30 — Commit ===
+
+Commit all
+
+=== End of Prompt 32 ===
+
+=== Prompt 33 — 2026-10-30 — Razorpay payment flow ===
+
+Integrate Razorpay for payments: the payment flow, the payment API and the connection. Ask for payment from the user portal, check the payment status in the Super Admin portal. Make sure everything works without errors, and that money is never lost if the user pays and refreshes. Put the keys in both .env.example and .env (values to be added later).
+
+=== End of Prompt 33 ===
+
+=== Prompt 34 — 2026-11-03 — Overlapping tables ===
+
+Designs are not looking good in many places: whenever there is a table, content overlaps and I can't see the next column's content. Please fix it (both in the user and the admin portals).
+
+=== End of Prompt 34 ===
+
+=== Prompt 35 — 2026-11-03 — Rupees and GST ===
+
+I want to configure my prices in rupees and take GST on top of that; make the appropriate changes without breaking the working features.
+
+=== End of Prompt 35 ===
+
+=== Prompt 36 — 2026-11-03 — Commit ===
+
+Commit all
+
+=== End of Prompt 36 ===
+
+=== Prompt 37 — 2026-11-05 — Live ₹1 payment test ===
+
+Use my UI to make a ₹1 payment, show the QR so I can pay, and check that the data updates. (Then: "Yes, ₹1 without GST", "Signed in", "I've done testing It's working".)
+
+=== End of Prompt 37 ===
+
+=== Prompt 38 — 2026-11-05 — PDF invoice ===
+
+Give an option to download the invoice. Create a proper PDF invoice. Keep a space for the logo. I'll give the logo later, and the SaaS name is Cloud Disk.
+
+=== End of Prompt 38 ===
+
+=== Prompt 39 — 2026-11-05 — Payment receipt email with PDF ===
+
+Now, whenever the payment is done, please send a mail to the customer. Give the download link for this PDF.
+(Follow-up: I meant they should find the PDF in their mail as well.)
+
+=== End of Prompt 39 ===
+
+=== Prompt 40 — 2026-11-05 — Receipt link opens an invoice page ===
+
+Don't send attachments directly in mail. Instead, send the link to download the attachment. On that link, open a browser with the URL of the SaaS product where they can view the invoice and download it. It should be auth-free, so they don't have to log in for that.
+
+=== End of Prompt 40 ===
+
+=== Prompt 41 — 2026-11-05 — Commit ===
+
+Commit all
+
+=== End of Prompt 41 ===
+
+=== Prompt 42 — 2026-11-05 — In-browser document editors: research (relayed from the main session; paraphrased) ===
+
+Let users open and edit files in place in the consumer portal instead of downloading them: one editor project per document type (docs, sheets, PDF, ...), modelled on Google Docs and Sheets, with AI features through an LLM API (Groq for now, behind a provider-agnostic layer). Must be competitive with the market. Phase 1: research the market and open-source options, propose an architecture, write a ranked shortlist, and ask which editor to start with.
+
+=== End of Prompt 42 ===
+
+=== Prompt 43 — 2026-11-06 — Start with Docs ===
+
+Start with Docs
+
+=== End of Prompt 43 ===
+
+=== Prompt 44 — 2026-11-06 — Approve Docs editor defaults ===
+
+Approve defaults
+
+=== End of Prompt 44 ===
+
+=== Prompt 45 — 2026-11-06 — Start D2 ===
+
+Start D2
+
+=== End of Prompt 45 ===
+
+=== Prompt 46 — 2026-11-06 — Start D3 ===
+
+Start D3
+
+=== End of Prompt 46 ===
+
+=== Prompt 47 — 2026-11-06 — Commit ===
+
+Commit now
+
+=== End of Prompt 47 ===
+
+=== Prompt 48 — 2026-11-06 — Start D4 ===
+
+Start D4
+
+=== End of Prompt 48 ===
+
+=== Prompt 49 — 2026-11-07 — Start D4 (again) ===
+
+Start D4 / Try again
+
+=== End of Prompt 49 ===
+
+=== Prompt 50 — 2026-11-07 — Start D5 ===
+
+Start D5
+
+=== End of Prompt 50 ===
+
+=== Prompt 51 — 2026-11-07 — Start D6 ===
+
+Start D6
+
+=== End of Prompt 51 ===
+
+=== Prompt 52 — 2026-11-07 — Commit all ===
+
+Commit all
+
+=== End of Prompt 52 ===
+
+=== Prompt 53 — 2026-11-07 — Docs as a separate app ===
+
+The document editor must be a separate frontend project on its own port (its own subdomain in production). Clicking or opening a document in the storage portal opens it there. The Docs app should be like Google Docs: see recently opened docs, search the docs created with it, create a new doc. All documents are saved in the first portal, the storage software.
+
+=== End of Prompt 53 ===
+
+=== Prompt 54 — 2026-11-07 — Commit all ===
+
+Commit all
+
+=== End of Prompt 54 ===
+
+=== Prompt 55 — 2026-11-08 — Sheets editor ===
+
+Build the Cloud Disk Sheets editor (Google Sheets / Excel-style) as its own frontend project on port 5178, the way the Docs editor was built: learn from the Docs work, reuse the existing backend (content, versions, edit lock, AI proxy) and storage, define the feature set in docs/editor-sheets-feature-set.md first (MVP versus later, AI features for v1, .xlsx/.csv round-trip targets with a small test corpus, acceptance criteria), then implement in milestones: clicking a spreadsheet in the portal opens it in the Sheets app, edits autosave as new versions, locking and conflicts work, AI runs behind the backend proxy. Stack: Univer core + ExcelJS, no Univer Pro. Use spare ports for test servers; do not touch 8080, 5173, 5174, 5177. Commit only when asked.
+
+=== End of Prompt 55 ===
