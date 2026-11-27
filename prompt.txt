@@ -961,3 +961,51 @@ Use pnpm instead of npm.
 Okay, you can commit and publish the changes.
 
 === End of Prompt 80 ===
+
+=== Prompt 81 — 2026-11-27 — Landing published? ===
+
+Is the landing page website published to any remote URL?
+
+=== End of Prompt 81 ===
+
+=== Prompt 82 — 2026-11-27 — Publish the landing repository ===
+
+https://github.com/Empedance/hard_drive_landing.git — publish on this remote URL.
+
+=== End of Prompt 82 ===
+
+=== Prompt 83 — 2026-11-27 — Nginx files ===
+
+The projects are built on the server in ~/hard_drive. Give a dedicated nginx file for each with 301 redirects; I use vim.
+
+=== End of Prompt 83 ===
+
+=== Prompt 84 — 2026-11-27 — Cloudflare Flexible ===
+
+I do not need certbot; I am using Flexible SSL in Cloudflare.
+
+=== End of Prompt 84 ===
+
+=== Prompt 85 — 2026-11-27 — Basic nginx files in chat ===
+
+Give all the nginx files here, basic, to copy and paste with vim and test one by one.
+
+=== End of Prompt 85 ===
+
+=== Prompt 86 — 2026-11-27 — Understand pricing and payments ===
+
+Understand the pricing and payment flow.
+
+=== End of Prompt 86 ===
+
+=== Prompt 87 — 2026-11-27 — Yearly prepaid billing with free trial ===
+
+Take payment only yearly, from the start of the organization. Give a 7-day free trial from the day the organization is created; then raise the bill for the whole year and resume features after it is cleared. Keep all features intact. Configure trial days in the admin price configuration, and allow a separate trial for a particular customer (for example 1 month). Follow how price configuration is implemented. (Decisions: trial storage with the owner picking the size; pay first to upgrade; renewal billed early and locked at expiry; existing organizations get a fresh trial.)
+
+=== End of Prompt 87 ===
+
+=== Prompt 88 — 2026-11-27 — Push the billing changes ===
+
+Push all now.
+
+=== End of Prompt 88 ===

@@ -75,7 +75,7 @@ Fixed by the prod profile: secure refresh cookie, `app.dev-tools.enabled=false`,
 
 ## 7. Known gaps before a commercial launch
 
-- Razorpay must be configured (keys and webhook) before launch: billing is postpaid with automatic reminders and blocking, so customers who cannot pay are blocked 15 days after their first due date. Pricing should be in INR unless the Razorpay account has international payments enabled. No invoice PDFs.
+- Razorpay must be configured (keys and webhook) before launch: when a free trial ends, features are paused until the yearly bill is paid, so without a payment provider no organization can continue. Publish pricing in INR (unless the Razorpay account has international payments enabled) together with the trial settings. The billing job runs every 5 minutes (`app.billing.poll-ms`). Database migration `V22` is additive except that it drops the one-bill-per-period unique constraint; on the first run after deploying it, every existing organization gets a fresh trial, keeps its storage and is unblocked, and earlier unpaid bills stay payable. Back up the database before deploying, and deploy the backend, user app, admin app and landing site together (the billing API changed).
 - Restricted share links require recipients with accounts; no email one-time codes.
 - The Super Admin second factor is an emailed code, so it is only as strong as that mailbox; protect staff mailboxes with their own MFA.
 - Rate limits are per instance.
